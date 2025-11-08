@@ -28,7 +28,7 @@ export default function Login() {
           {/* <!-- Password --> */}
           <div>
             <label
-              for="password"
+              htmlFor="password"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Password

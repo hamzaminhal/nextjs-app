@@ -12,7 +12,7 @@ export default function Signup() {
           {/* <!-- Full Name --> */}
           <div>
             <label
-              for="fullname"
+              htmlFor="fullname"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Full Name
@@ -20,7 +20,7 @@ export default function Signup() {
             <input
               type="text"
               id="fullname"
-              placeholder="John Doe"
+              placeholder="Full Name"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
             />
           </div>
@@ -28,7 +28,7 @@ export default function Signup() {
           {/* <!-- Username --> */}
           <div>
             <label
-              for="username"
+              htmlFor="username"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Username
@@ -36,7 +36,7 @@ export default function Signup() {
             <input
               type="text"
               id="username"
-              placeholder="johndoe"
+              placeholder="username"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
             />
           </div>
@@ -44,7 +44,7 @@ export default function Signup() {
           {/* <!-- Email --> */}
           <div>
             <label
-              for="email"
+              htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Email
@@ -60,7 +60,7 @@ export default function Signup() {
           {/* <!-- Password --> */}
           <div>
             <label
-              for="password"
+              htmlFor="password"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Password

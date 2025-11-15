@@ -183,7 +183,7 @@ export default function Posts() {
 
                 <button
                   onClick={() => dltPost(id)}
-                  className="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md
+                  className="px-4 py-2 bg-amber-900 text-white text-sm font-medium rounded-md
                        hover:bg-red-700 w-full sm:w-auto"
                 >
                   Delete

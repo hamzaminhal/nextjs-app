@@ -8,11 +8,11 @@ import {
 } from "../partial-components/posts";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { model } from "../partial-components/model";
+import Model, { model } from "../partial-components/model";
 
 const MySwal = withReactContent(Swal);
 
-export default function Products() {
+export default function Posts() {
   const [allPosts, setAllPosts] = useState([]);
   const [inputData, setInputData] = useState({
     id: null,
@@ -20,7 +20,9 @@ export default function Products() {
     description: "",
   });
   const [showBtn, setShowBtn] = useState(true);
+  const [model, setModel] = useState(false);
 
+  // Fetch Products
   const fetchProducts = async () => {
     MySwal.fire({
       title: "Loading...",
@@ -41,13 +43,16 @@ export default function Products() {
     fetchProducts();
   }, []);
 
+  // Edit button clicked
   const editData = (post) => {
+    setModel(true);
     let { id, name, description } = post;
     console.log(post);
     setInputData({ id: id, name: name, description: description });
     setShowBtn(false);
   };
 
+  // Edited data updated in backend
   const addEditData = async () => {
     MySwal.fire({
       title: "Updating...",
@@ -67,8 +72,10 @@ export default function Products() {
     });
     setShowBtn(true);
     MySwal.close();
+    setModel(false);
   };
 
+  // add post
   const addTask = async () => {
     if (inputData.name.trim() && inputData.description.trim()) {
       const newPost = {
@@ -82,6 +89,7 @@ export default function Products() {
         name: "",
         description: "",
       });
+      setModel(false);
     } else {
       MySwal.fire({
         title: "Alert",
@@ -118,65 +126,31 @@ export default function Products() {
       }
     });
   };
-
+  const showModel = () => {
+    setModel(true);
+  };
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
       <h1 className="text-3xl font-bold mb-8 text-gray-800">Posts</h1>
-      {/* <button
+
+      {model ? (
+        <Model
+          inputData={inputData}
+          setInputData={setInputData}
+          showBtn={showBtn}
+          addTask={addTask}
+          addEditData={addEditData}
+        />
+      ) : (
+        <button
           onClick={() => {
-            model();
+            showModel();
           }}
-          className="bg-blue-600 rounded-md px-4 py-1 text-white hover:bg-blue-700"
+          className="bg-blue-600 rounded-md px-4 py-1 text-white hover:bg-blue-700 m-3"
         >
           Add Post
-        </button> */}
-      <div className="border border-gray-300 rounded-lg p-4 mb-10 w-full max-w-lg bg-white shadow-sm">
-        <label className="block text-gray-700 font-medium mb-1">Title</label>
-        <input
-          type="text"
-          value={inputData.name}
-          onChange={(e) => {
-            setInputData((prev) => ({ ...prev, name: e.target.value }));
-          }}
-          placeholder="Enter title"
-          className="w-full border border-gray-300 rounded-md p-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <label className="block text-gray-700 font-medium mb-1">
-          Description
-        </label>
-        <textarea
-          placeholder="Enter description"
-          value={inputData.description}
-          onChange={(e) => {
-            setInputData((prev) => ({
-              ...prev,
-              description: e.target.value,
-            }));
-          }}
-          className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        ></textarea>
-        {showBtn ? (
-          <button
-            onClick={() => {
-              addTask();
-            }}
-            className="bg-blue-600 rounded-md px-4 py-1 text-white hover:bg-blue-700"
-          >
-            Add Post
-          </button>
-        ) : (
-          <button
-            onClick={() => {
-              addEditData();
-            }}
-            className="bg-blue-600 rounded-md px-4 py-1 text-white hover:bg-blue-700"
-          >
-            Edit
-          </button>
-        )}
-      </div>
-
+        </button>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
         {allPosts.map((post) => {
           const { name, description, id } = post;
@@ -193,7 +167,7 @@ export default function Products() {
               </h2>
 
               {/* Description */}
-              <p className="text-gray-600 text-sm leading-relaxed break-words flex-grow">
+              <p className="text-gray-600 text-sm leading-relaxed wrap-break-words grow">
                 {description}
               </p>
 

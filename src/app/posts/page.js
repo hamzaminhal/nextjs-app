@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import {
   addEditDataToBackend,
@@ -9,6 +10,7 @@ import {
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Model, { model } from "../partial-components/model";
+import Loader from "../partial-components/loader";
 
 const MySwal = withReactContent(Swal);
 
@@ -21,25 +23,18 @@ export default function Posts() {
   });
   const [showBtn, setShowBtn] = useState(true);
   const [model, setModel] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Fetch Products
   const fetchProducts = async () => {
-    MySwal.fire({
-      title: "Loading...",
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      didOpen: () => {
-        MySwal.showLoading();
-      },
-    });
-
+    setLoading(true);
     const incomingData = await posts();
     setAllPosts(incomingData.data);
-
-    MySwal.close();
+    setLoading(false);
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchProducts();
   }, []);
 
@@ -130,69 +125,72 @@ export default function Posts() {
     setModel(true);
   };
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
-      <h1 className="text-3xl font-bold mb-8 text-gray-800">Posts</h1>
+    <>
+      {loading && <Loader />}
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
+        <h1 className="text-3xl font-bold mb-8 text-gray-800">Posts</h1>
 
-      {model ? (
-        <Model
-          inputData={inputData}
-          setInputData={setInputData}
-          showBtn={showBtn}
-          addTask={addTask}
-          addEditData={addEditData}
-        />
-      ) : (
-        <button
-          onClick={() => {
-            showModel();
-          }}
-          className="bg-blue-600 rounded-md px-4 py-1 text-white hover:bg-blue-700 m-3"
-        >
-          Add Post
-        </button>
-      )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
-        {allPosts.map((post) => {
-          const { name, description, id } = post;
+        {model ? (
+          <Model
+            inputData={inputData}
+            setInputData={setInputData}
+            showBtn={showBtn}
+            addTask={addTask}
+            addEditData={addEditData}
+          />
+        ) : (
+          <button
+            onClick={() => {
+              showModel();
+            }}
+            className="bg-blue-600 rounded-md px-4 py-1 text-white hover:bg-blue-700 m-3"
+          >
+            Add Post
+          </button>
+        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+          {allPosts.map((post) => {
+            const { name, description, id } = post;
 
-          return (
-            <div
-              key={id}
-              className="bg-white rounded-2xl border border-gray-200 shadow-sm 
+            return (
+              <div
+                key={id}
+                className="bg-white rounded-2xl border border-gray-200 shadow-sm 
                    hover:shadow-md transition-shadow duration-200 p-6 flex flex-col"
-            >
-              {/* Title */}
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                {name}
-              </h2>
+              >
+                {/* Title */}
+                <h2 className="text-lg font-semibold text-gray-800 mb-2">
+                  {name}
+                </h2>
 
-              {/* Description */}
-              <p className="text-gray-600 text-sm leading-relaxed wrap-break-words grow">
-                {description}
-              </p>
+                {/* Description */}
+                <p className="text-gray-600 text-sm leading-relaxed wrap-break-words grow">
+                  {description}
+                </p>
 
-              {/* Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                <button
-                  onClick={() => editData(post)}
-                  className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md
+                {/* Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                  <button
+                    onClick={() => editData(post)}
+                    className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md
                        hover:bg-blue-700 w-full sm:w-auto"
-                >
-                  Edit
-                </button>
+                  >
+                    Edit
+                  </button>
 
-                <button
-                  onClick={() => dltPost(id)}
-                  className="px-4 py-2 bg-amber-900 text-white text-sm font-medium rounded-md
+                  <button
+                    onClick={() => dltPost(id)}
+                    className="px-4 py-2 bg-amber-900 text-white text-sm font-medium rounded-md
                        hover:bg-red-700 w-full sm:w-auto"
-                >
-                  Delete
-                </button>
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
